@@ -11,7 +11,11 @@
   "author": "edevars <e.devars.dev@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1"
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.6.5"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
