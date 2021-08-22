@@ -1,5 +1,6 @@
 const express = require("express");
 const { UserService } = require("../services/user");
+const boom = require("@hapi/boom");
 
 function authApi(app) {
   const router = express.Router();
@@ -7,16 +8,22 @@ function authApi(app) {
 
   const userService = new UserService();
 
-  router.post("/sign-up", async function (req, res) {
+  router.post("/sign-up", async function (req, res, next) {
+    
     const { body: user } = req;
-    const { profilePhoto } = req.files;
+    // if (!req.files) {
+    //   next(boom.badRequest("Profile picture not found"));
+    // }
+
     try {
+      throw new Error("Mi error");
+      const { profilePhoto } = req.files;
       const newUser = await userService.createUser(user, profilePhoto);
       if (newUser) {
         res.status(200).json(newUser);
       }
     } catch (error) {
-      res.status(500).json(error);
+      next(error);
     }
   });
 }

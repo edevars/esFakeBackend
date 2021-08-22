@@ -2,6 +2,12 @@ const express = require("express");
 const fileUpload = require("express-fileupload");
 const { initConnection } = require("./lib/database/initConnection");
 
+const {
+  logErrors,
+  errorHandler,
+  wrapErrors
+} = require('./utils/middlewares/errorHandler');
+
 const app = express();
 const port = 3000;
 
@@ -20,6 +26,11 @@ app.use(
 
 // Adding routes
 authApi(app);
+
+//Error handling
+app.use(logErrors);
+app.use(wrapErrors);
+app.use(errorHandler);
 
 app.listen(port, async () => {
   await initConnection();
