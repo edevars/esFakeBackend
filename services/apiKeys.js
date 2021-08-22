@@ -2,7 +2,7 @@ const { sequelize } = require("../lib/db");
 
 class ApiKeyService {
   constructor() {
-    this.table = sequelize.models.apiKeys;
+    this.table = sequelize.models.apiKey;
   }
 
   async createApiKey(apiKey) {
