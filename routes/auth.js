@@ -7,11 +7,11 @@ function authApi(app) {
 
   const userService = new UserService();
 
-  router.post("/create", async function (req, res) {
+  router.post("/sign-up", async function (req, res) {
     const { body: user } = req;
-
+    const { profilePhoto } = req.files;
     try {
-      const newUser = await userService.createUser(user);
+      const newUser = await userService.createUser(user, profilePhoto);
       if (newUser) {
         res.status(200).json(newUser);
       }

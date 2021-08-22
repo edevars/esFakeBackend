@@ -11,8 +11,10 @@
   "author": "edevars <e.devars.dev@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "cloudinary": "^1.26.3",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.6.5"

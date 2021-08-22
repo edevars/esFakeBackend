@@ -1,5 +1,6 @@
 const express = require("express");
-const { initConnection } = require("./lib/initConnection");
+const fileUpload = require("express-fileupload");
+const { initConnection } = require("./lib/database/initConnection");
 
 const app = express();
 const port = 3000;
@@ -9,6 +10,13 @@ const { authApi } = require("./routes/auth");
 
 // Body parser
 app.use(express.json());
+
+//To upload files
+app.use(
+  fileUpload({
+    useTempFiles: true,
+  })
+);
 
 // Adding routes
 authApi(app);

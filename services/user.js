@@ -1,13 +1,22 @@
-const { sequelize } = require("../lib/db");
+const { sequelize } = require("../lib/database/db");
+const { ImageService } = require("./images");
 
+const imageService = new ImageService("profile-pictures");
 class UserService {
   constructor() {
     this.table = sequelize.models.user;
   }
 
-  async createUser(user) {
+  async createUser(user, photo) {
     try {
-      const newUser = await this.table.create(user);
+      const photoUrl = await imageService.upload(photo);
+
+      let tmpUser = {
+        ...user,
+        userUrlPhoto: photoUrl,
+      };
+
+      const newUser = await this.table.create(tmpUser);
       return newUser;
     } catch (error) {
       console.error(error);
