@@ -8,7 +8,7 @@ const ApiKey = (sequelize) => {
       type: DataTypes.STRING,
       unique: true,
     },
-    scopes: DataTypes.STRING,
+    scopes: DataTypes.TEXT,
   });
 };
 

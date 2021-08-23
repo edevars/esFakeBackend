@@ -5,17 +5,21 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=production node index",
-    "dev": "DEBUG=app:* nodemon index"
+    "dev": "DEBUG=app:* nodemon index",
+    "seedApiKeys": "node scripts/seedApiKeys.js"
   },
   "keywords": [],
   "author": "edevars <e.devars.dev@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "@hapi/boom": "^9.1.4",
+    "bcrypt": "^5.0.1",
     "cloudinary": "^1.26.3",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
+    "passport": "^0.4.1",
+    "passport-http": "^0.3.0",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.6.5"
