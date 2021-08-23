@@ -8,7 +8,6 @@ passport.use(
   new BasicStrategy(async function (email, password, cb) {
     const userService = new UserService();
     try {
-      console.log(email, password);
       const [user] = await userService.getUserByEmail(email);
 
       if (!user.dataValues) {
