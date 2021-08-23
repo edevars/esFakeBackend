@@ -13,6 +13,19 @@ class ApiKeyService {
       console.error(error);
     }
   }
+
+  async getApiKey({ token }) {
+    try {
+      const newApiKey = await this.table.findOne({
+        where: {
+          token,
+        },
+      });
+      return newApiKey;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
 
 module.exports = { ApiKeyService };
