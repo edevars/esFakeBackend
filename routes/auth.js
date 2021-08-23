@@ -77,9 +77,15 @@ function authApi(app) {
 
     try {
       const { profilePhoto } = req.files;
-      const newUser = await userService.createUser(user, profilePhoto);
-      if (newUser) {
-        res.status(200).json(newUser);
+      const userExists = await userService.getUserByEmail(user.email);
+
+      if (userExists) {
+        next(boom.badRequest("User already exists"));
+      } else {
+        const newUser = await userService.createUser(user, profilePhoto);
+        if (newUser) {
+          res.status(200).json(newUser);
+        }
       }
     } catch (error) {
       next(error);
