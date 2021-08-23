@@ -2,13 +2,20 @@ const express = require("express");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const boom = require("@hapi/boom");
+
+// Utils
 const { config } = require("../config");
 const { scopesToArray } = require("../utils/scopesTransformation");
+const { createUser } = require("../schemas/UserSchema");
 
+// Services
 const { UserService } = require("../services/user");
 const { ApiKeyService } = require("../services/apiKeys");
 
-//Basic strategy
+// Validation handlers
+const { schemaValidator } = require("../utils/middlewares/schemaValidator");
+
+//Basic auth strategy
 require("../utils/auth/basic");
 
 function authApi(app) {
@@ -69,28 +76,32 @@ function authApi(app) {
     })(req, res, next);
   });
 
-  router.post("/sign-up", async function (req, res, next) {
-    const { body: user } = req;
-    if (!req.files) {
-      next(boom.badRequest("Profile picture not found"));
-    }
-
-    try {
-      const { profilePhoto } = req.files;
-      const userExists = await userService.getUserByEmail(user.email);
-
-      if (userExists) {
-        next(boom.badRequest("User already exists"));
-      } else {
-        const newUser = await userService.createUser(user, profilePhoto);
-        if (newUser) {
-          res.status(200).json(newUser);
-        }
+  router.post(
+    "/sign-up",
+    schemaValidator(createUser),
+    async function (req, res, next) {
+      const { body: user } = req;
+      if (!req.files) {
+        next(boom.badRequest("Profile picture not found"));
       }
-    } catch (error) {
-      next(error);
+
+      try {
+        const { profilePhoto } = req.files;
+        const userExists = await userService.getUserByEmail(user.email);
+        
+        if (userExists) {
+          next(boom.badRequest("User already exists"));
+        } else {
+          const newUser = await userService.createUser(user, profilePhoto);
+          if (newUser) {
+            res.status(200).json(newUser);
+          }
+        }
+      } catch (error) {
+        next(error);
+      }
     }
-  });
+  );
 }
 
 module.exports = { authApi };

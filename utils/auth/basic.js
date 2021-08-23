@@ -8,7 +8,7 @@ passport.use(
   new BasicStrategy(async function (email, password, cb) {
     const userService = new UserService();
     try {
-      const [user] = await userService.getUserByEmail(email);
+      const user = await userService.getUserByEmail(email);
 
       if (!user.dataValues) {
         return cb(boom.unauthorized("User or password are incorrect"), false);

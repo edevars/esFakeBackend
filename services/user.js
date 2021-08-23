@@ -32,7 +32,7 @@ class UserService {
   }
 
   async getUserByEmail(email) {
-    const user = await this.table.findAll({
+    const user = await this.table.findOne({
       where: {
         email,
       },
