@@ -9,14 +9,12 @@ function authApi(app) {
   const userService = new UserService();
 
   router.post("/sign-up", async function (req, res, next) {
-    
     const { body: user } = req;
-    // if (!req.files) {
-    //   next(boom.badRequest("Profile picture not found"));
-    // }
+    if (!req.files) {
+      next(boom.badRequest("Profile picture not found"));
+    }
 
     try {
-      throw new Error("Mi error");
       const { profilePhoto } = req.files;
       const newUser = await userService.createUser(user, profilePhoto);
       if (newUser) {

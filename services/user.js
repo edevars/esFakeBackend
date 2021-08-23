@@ -1,5 +1,6 @@
 const { sequelize } = require("../lib/database/db");
 const { ImageService } = require("./images");
+const bcrypt = require("bcrypt");
 
 const imageService = new ImageService("profile-pictures");
 class UserService {
@@ -8,67 +9,53 @@ class UserService {
   }
 
   async createUser(user, photo) {
-    try {
-      const photoUrl = await imageService.upload(photo);
+    const { password } = user;
+    const photoUrl = await imageService.upload(photo);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-      let tmpUser = {
-        ...user,
-        userUrlPhoto: photoUrl,
-      };
+    const tmpUser = {
+      ...user,
+      password: hashedPassword,
+      userUrlPhoto: photoUrl,
+    };
 
-      const newUser = await this.table.create(tmpUser);
-      return newUser;
-    } catch (error) {
-      console.error(error);
-    }
+    let newUser = await this.table.create(tmpUser);
+
+    delete newUser.dataValues.password;
+    
+    return newUser.dataValues;
   }
 
   async getUsers() {
-    try {
-      const users = await this.table.findAll();
-      return users;
-    } catch (error) {
-      console.error(error);
-    }
+    const users = await this.table.findAll();
+    return users;
   }
 
   async getUserByEmail(email) {
-    try {
-      const user = await this.table.findAll({
-        where: {
-          email,
-        },
-      });
-      return user;
-    } catch (error) {
-      console.error(error);
-    }
+    const user = await this.table.findAll({
+      where: {
+        email,
+      },
+    });
+    return user;
   }
 
   async updateUserByEmail(fields, email) {
-    try {
-      const updatedUser = await this.table.update(fields, {
-        where: {
-          email,
-        },
-      });
-      return updatedUser;
-    } catch (error) {
-      console.error(error);
-    }
+    const updatedUser = await this.table.update(fields, {
+      where: {
+        email,
+      },
+    });
+    return updatedUser;
   }
 
   async deleteUserByEmail(email) {
-    try {
-      const deletedUser = await this.table.destroy({
-        where: {
-          email,
-        },
-      });
-      return deletedUser;
-    } catch (error) {
-      console.error(error);
-    }
+    const deletedUser = await this.table.destroy({
+      where: {
+        email,
+      },
+    });
+    return deletedUser;
   }
 }
 

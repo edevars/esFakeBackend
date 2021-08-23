@@ -21,6 +21,7 @@ app.use(express.json());
 app.use(
   fileUpload({
     useTempFiles: true,
+    tempFileDir: '/tmp'
   })
 );
 
