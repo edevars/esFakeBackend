@@ -2,6 +2,9 @@ const bcrypt = require("bcrypt");
 const { adminScopes, userScopes } = require("../config/usersScopes");
 const { ApiKeyService } = require("../services/apiKeys");
 const { scopesToString } = require("../utils/scopesTransformation");
+const { initConnection } = require("../lib/database/initConnection");
+
+
 
 function generateRandomToken() {
   let randomApiKey = "";
@@ -29,6 +32,7 @@ const apiKeys = [
 async function seedApiKeys() {
   const apiKeyService = new ApiKeyService();
   try {
+    await initConnection();
     let promises = apiKeys.map(async (apiKey) => {
       await apiKeyService.createApiKey(apiKey);
     });
