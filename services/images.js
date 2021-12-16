@@ -8,9 +8,16 @@ class ImageService {
 
   upload(photo, folder = this.folder) {
     return new Promise((resolve, reject) => {
-      cloudinary.uploader.upload(
-        photo.tempFilePath,
-        { folder },
+
+      const cloudinaryImageOptions = {
+          folder,
+          gravity: "face:auto",
+          crop: "thumb",
+          width: 200,
+          height: 200,
+      }
+
+      cloudinary.uploader.upload(photo.tempFilePath, cloudinaryImageOptions,
         function (err, image) {
           if (err) {
             reject(err);
