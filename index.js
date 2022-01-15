@@ -1,6 +1,8 @@
 const express = require("express");
 const fileUpload = require("express-fileupload");
 const { initConnection } = require("./lib/database/initConnection");
+const cors = require("cors");
+
 
 const {
   logErrors,
@@ -24,6 +26,11 @@ app.use(
     tempFileDir: '/tmp'
   })
 );
+
+// Cors
+app.use(cors({
+  origin: '*'
+}));
 
 // Adding routes
 authApi(app);
