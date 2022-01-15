@@ -16,12 +16,12 @@ class AnalysisService {
 
   async getAnalysis({ id }) {
     try {
-      const newApiKey = await this.table.findOne({
+      const analysis = await this.table.findOne({
         where: {
           id,
         },
       });
-      return newApiKey;
+      return analysis;
     } catch (error) {
       console.error(error);
     }

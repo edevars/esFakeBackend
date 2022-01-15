@@ -46,8 +46,20 @@ function analysisApi(app) {
             })
 
             // Devuelve analisis
-            return res.status(200).json(createdAnalysis.dataValues)
+            return res.status(201).json(createdAnalysis.dataValues)
         } catch (error) {
+            next(error)
+        }
+    })
+
+    router.get('/', async function (req, res, next) {
+        const { id } = req.body
+
+        try {
+            const { dataValues: analysis } = await analysisService.getAnalysis({ id })
+            return res.status(200).json(analysis)
+        }
+        catch (error) {
             next(error)
         }
     })
