@@ -1,4 +1,3 @@
-const bcrypt = require("bcrypt");
 const { adminScopes, userScopes } = require("../config/usersScopes");
 const { ApiKeyService } = require("../services/apiKeys");
 const { scopesToString } = require("../utils/scopesTransformation");
@@ -7,15 +6,7 @@ const { initConnection } = require("../lib/database/initConnection");
 
 
 function generateRandomToken() {
-  let randomApiKey = "";
-  for (let i = 0; i < 64; i++) {
-    let charCode = Math.floor(Math.random() * (126 - 34)) + 34;
-    let randomChar = String.fromCharCode(charCode);
-    randomApiKey += randomChar;
-  }
-
-  const hashedApiKey = bcrypt.hashSync(randomApiKey, 10);
-  return hashedApiKey;
+  return Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2)
 }
 
 const apiKeys = [

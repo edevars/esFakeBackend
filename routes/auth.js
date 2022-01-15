@@ -81,18 +81,18 @@ function authApi(app) {
     schemaValidator(createUser),
     async function (req, res, next) {
       const { body: user } = req;
-      if (!req.files) {
-        next(boom.badRequest("Profile picture not found"));
-      }
-
       try {
-        const { profilePhoto } = req.files;
+        let photo = null
+        if(req.files){
+          const { profilePhoto } = req.files;
+          photo = profilePhoto
+        }
         const userExists = await userService.getUserByEmail(user.email);
         
         if (userExists) {
           next(boom.badRequest("User already exists"));
         } else {
-          const newUser = await userService.createUser(user, profilePhoto);
+          const newUser = await userService.createUser(user, photo);
           if (newUser) {
             res.status(200).json(newUser);
           }
