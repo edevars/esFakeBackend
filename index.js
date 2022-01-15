@@ -15,6 +15,7 @@ const port = 3000;
 
 // Require routes
 const { authApi } = require("./routes/auth");
+const { analysisApi } = require("./routes/analysis");
 
 // Body parser
 app.use(express.json());
@@ -31,9 +32,10 @@ app.use(
 app.use(cors({
   origin: '*'
 }));
-
+analysisApi(app)
 // Adding routes
 authApi(app);
+
 
 //Error handling
 app.use(logErrors);

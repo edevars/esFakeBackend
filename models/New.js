@@ -9,7 +9,7 @@ const New = sequelize.define("new", {
     unique: true,
   },
   title: DataTypes.STRING,
-  body: DataTypes.STRING,
+  articleText: DataTypes.TEXT,
 });
 
 module.exports = New;
