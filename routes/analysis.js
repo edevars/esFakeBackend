@@ -19,7 +19,6 @@ function analysisApi(app) {
             const newByUrl = await newsService.getNewByUrl(url)
             if (newByUrl) {
                 const analysis = await analysisService.getAnalysis({ id: newByUrl.dataValues.analysisId })
-                delete analysis.dataValues.id
                 return res.status(200).json(analysis.dataValues)
             }
 
@@ -47,7 +46,7 @@ function analysisApi(app) {
             })
 
             // Devuelve analisis
-            return res.status(200).json(analysis)
+            return res.status(200).json(createdAnalysis.dataValues)
         } catch (error) {
             next(error)
         }
