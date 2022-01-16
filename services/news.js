@@ -26,6 +26,19 @@ class NewsService {
       console.error(error);
     }
   }
+
+  async getNewByAnalysesId(id) {
+    try {
+      const newById = await this.table.findOne({
+        where: {
+          analysisId: id,
+        },
+      });
+      return newById;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
 
 module.exports = { NewsService };

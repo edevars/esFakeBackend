@@ -71,6 +71,18 @@ function analysisApi(app) {
             next(error)
         }
     })
+
+    router.get('/user-analyses', async function (req, res, next) {
+        try {
+            const { email } = req.body
+            const { analyses } = await userService.getUserWithAnalyses(email)
+            const newsPromises = analyses.map(({id}) => newsService.getNewByAnalysesId(id))
+            const news = await Promise.all(newsPromises)
+            res.status(200).json({news})
+        } catch (error) {
+            next(error)
+        }
+    })
 }
 
 module.exports = { analysisApi };

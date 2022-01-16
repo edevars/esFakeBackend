@@ -1,6 +1,8 @@
 const { sequelize } = require("../lib/database/db");
 const { ImageService } = require("./images");
+const Analysis = require("../models/Analysis");
 const bcrypt = require("bcrypt");
+
 
 const imageService = new ImageService("profile-pictures");
 class UserService {
@@ -41,6 +43,16 @@ class UserService {
       where: {
         email,
       },
+    });
+    return user;
+  }
+
+  async getUserWithAnalyses(email) {
+    const user = await this.table.findOne({
+      where: {
+        email,
+      },
+      include: Analysis
     });
     return user;
   }
