@@ -1,8 +1,10 @@
 const axios = require("axios");
 const express = require("express");
+const boom = require("@hapi/boom");
 const { config } = require("../config");
 const { AnalysisService } = require("../services/analysis");
 const { NewsService } = require("../services/news");
+const { UserService } = require("../services/user");
 
 
 function analysisApi(app) {
@@ -12,10 +14,15 @@ function analysisApi(app) {
     // Services
     const analysisService = new AnalysisService();
     const newsService = new NewsService()
+    const userService = new UserService()
 
     router.post('/predict', async function (req, res, next) {
-        const { url, title, articleText } = req.body
+        const { url, title, articleText, email } = req.body
         try {
+            const user = await userService.getUserByEmail(email)
+            if (!user) {
+                next(boom.unauthorized("User not found"))
+            }
             const newByUrl = await newsService.getNewByUrl(url)
             if (newByUrl) {
                 const analysis = await analysisService.getAnalysis({ id: newByUrl.dataValues.analysisId })
@@ -35,6 +42,7 @@ function analysisApi(app) {
             }
             // Crea analisis
             const createdAnalysis = await analysisService.createAnalysis(analysis)
+            await user.addAnalysis(createdAnalysis, { through: { selfGranted: false } })
             const analysisId = createdAnalysis.dataValues.id
 
             // Crea noticia con analisis
